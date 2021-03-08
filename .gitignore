@@ -47,5 +47,8 @@ Thumbs.db
 #log files, for some plugins
 *.log
 
-#python bytecode cache, for some plugins.
+# python bytecode cache, for some plugins.
 *.pyc
+
+# Visual Studio Setting File
+.editorconfig
