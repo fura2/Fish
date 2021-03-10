@@ -4,7 +4,7 @@
 
 Open ``Fish/WebGLBuild`` directory in the way as described in [this web page](https://yotiky.hatenablog.com/entry/2020/7/22/webserverforchrome).
 
-## Instructions
+## Usage
 
 - ``W`` or ``Up`` key : go up
 - ``S`` or ``Down`` key : go down
