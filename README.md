@@ -2,7 +2,7 @@
 
 ## Screenshot
 
-In preparation
+![](./screenshot.png)
 
 ## Demo
 
