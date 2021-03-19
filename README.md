@@ -1,5 +1,7 @@
 # School of Fish Simulator
 
+School of fish simulator made with Unity
+
 ## Screenshot
 
 ![](./screenshot.png)
@@ -17,7 +19,7 @@
 - ``Q`` key : go backward
 - ``E`` key : go forward
 
-## How to edit the Unity project
+## How to open the Unity project
 
 Unity version: 2019.4.21f1
 

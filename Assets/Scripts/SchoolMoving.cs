@@ -5,22 +5,27 @@ using UnityEngine;
 
 public class SchoolMoving : MonoBehaviour
 {
-	public float separationCoefficient = 1.0f;
-	public float alignmentCoefficient = 0.01f;
-	public float cohensionCoefficient = 0.001f;
-	public float separationDistance = 5.0f;
-	public float visibleDistance = 10.0f;
-	public float minimumVelocity = 10.0f;
-	public float maximumVelocity = 20.0f;
+	[SerializeField] private float separationCoefficient;
+	[SerializeField] private float alignmentCoefficient;
+	[SerializeField] private float cohensionCoefficient;
+	[SerializeField] private float separationDistance;
+	[SerializeField] private float visibleDistance;
+	[SerializeField] private float minimumVelocity;
+	[SerializeField] private float maximumVelocity;
 
-	public GameObject tankObject;
+	[SerializeField] private GameObject tankObject;
+	private TankUtility tankScript;
 
 	private int numberOfFish;
 	private GameObject[] fishObject;
 	private FishMoving[] fishScript;
 
+	private Vector3[] nextVelocity;
+
 	void Start()
 	{
+		tankScript = tankObject.GetComponent<TankUtility>();
+
 		numberOfFish = transform.childCount;
 		fishObject = new GameObject[numberOfFish];
 		fishScript = new FishMoving[numberOfFish];
@@ -29,43 +34,34 @@ public class SchoolMoving : MonoBehaviour
 			fishObject[i] = transform.GetChild(i).gameObject;
 			fishScript[i] = fishObject[i].GetComponent<FishMoving>();
 		}
+
+		nextVelocity = new Vector3[numberOfFish];
 	}
 
 	void Update()
 	{
-		Vector3[] nextVelocity = new Vector3[numberOfFish];
 		for (int i = 0; i < numberOfFish; i++)
 		{
-			nextVelocity[i] = fishScript[i].velocity;
+			nextVelocity[i] = fishScript[i].Velocity;
 		}
 
-		// Boids
+		// Boids algorithm
 		//   http://www.red3d.com/cwr/boids/
 		//   https://github.com/beneater/boids
-		Separation(nextVelocity);
-		Alignment(nextVelocity);
-		Cohension(nextVelocity);
+		Separation();
+		Alignment();
+		Cohension();
+
+		Clamp();
 
 		for (int i = 0; i < numberOfFish; i++)
 		{
-			float magnitude = nextVelocity[i].magnitude;
-			if (magnitude < minimumVelocity)
-			{
-				nextVelocity[i] *= minimumVelocity / magnitude;
-			}
-			else if (magnitude > maximumVelocity)
-			{
-				nextVelocity[i] *= maximumVelocity / magnitude;
-			}
-		}
+			fishScript[i].Velocity = nextVelocity[i];
 
-		for (int i = 0; i < numberOfFish; i++)
-		{
-			fishScript[i].velocity = nextVelocity[i];
 		}
 	}
 
-	void Separation(Vector3[] nextVelocity)
+	void Separation()
 	{
 		for (int i = 0; i < numberOfFish; i++)
 		{
@@ -76,11 +72,11 @@ public class SchoolMoving : MonoBehaviour
 					continue;
 				}
 
-				Vector3 vij = tankObject.GetComponent<TankUtility>().GetDirection(
+				Vector3 vij = tankScript.GetDirection(
 					fishObject[i].transform.position,
 					fishObject[j].transform.position
 				);
-				float dij = tankObject.GetComponent<TankUtility>().GetDistance(
+				float dij = tankScript.GetDistance(
 					fishObject[i].transform.position,
 					fishObject[j].transform.position
 				);
@@ -90,7 +86,7 @@ public class SchoolMoving : MonoBehaviour
 		}
 	}
 
-	void Alignment(Vector3[] nextVelocity)
+	void Alignment()
 	{
 		for (int i = 0; i < numberOfFish; i++)
 		{
@@ -104,14 +100,14 @@ public class SchoolMoving : MonoBehaviour
 					continue;
 				}
 
-				float dij = tankObject.GetComponent<TankUtility>().GetDistance(
+				float dij = tankScript.GetDistance(
 					fishObject[i].transform.position,
 					fishObject[j].transform.position
 				);
 				if (dij < visibleDistance)
 				{
 					numberOfNeighbors++;
-					averageVelocity += fishScript[j].velocity;
+					averageVelocity += fishScript[j].Velocity;
 				}
 			}
 			if (numberOfNeighbors == 0)
@@ -119,11 +115,11 @@ public class SchoolMoving : MonoBehaviour
 				continue;
 			}
 			averageVelocity /= numberOfNeighbors;
-			nextVelocity[i] += alignmentCoefficient * (averageVelocity - fishScript[i].velocity);
+			nextVelocity[i] += alignmentCoefficient * (averageVelocity - fishScript[i].Velocity);
 		}
 	}
 
-	void Cohension(Vector3[] nextVelocity)
+	void Cohension()
 	{
 		for (int i = 0; i < numberOfFish; i++)
 		{
@@ -137,11 +133,11 @@ public class SchoolMoving : MonoBehaviour
 					continue;
 				}
 
-				Vector3 vij = tankObject.GetComponent<TankUtility>().GetDirection(
+				Vector3 vij = tankScript.GetDirection(
 					fishObject[i].transform.position,
 					fishObject[j].transform.position
 				);
-				float dij = tankObject.GetComponent<TankUtility>().GetDistance(
+				float dij = tankScript.GetDistance(
 					fishObject[i].transform.position,
 					fishObject[j].transform.position
 				);
@@ -157,6 +153,22 @@ public class SchoolMoving : MonoBehaviour
 			}
 			gap /= numberOfNeighbors;
 			nextVelocity[i] += cohensionCoefficient * gap / Time.deltaTime;
+		}
+	}
+
+	void Clamp()
+	{
+		for (int i = 0; i < numberOfFish; i++)
+		{
+			float magnitude = nextVelocity[i].magnitude;
+			if (magnitude < minimumVelocity)
+			{
+				nextVelocity[i] *= minimumVelocity / magnitude;
+			}
+			else if (magnitude > maximumVelocity)
+			{
+				nextVelocity[i] *= maximumVelocity / magnitude;
+			}
 		}
 	}
 }

@@ -44,7 +44,7 @@ Icon?
 ehthumbs.db
 Thumbs.db
 
-#log files, for some plugins
+# log files, for some plugins
 *.log
 
 # python bytecode cache, for some plugins.
@@ -53,3 +53,6 @@ Thumbs.db
 # Visual Studio Setting File
 .editorconfig
 .vsconfig
+
+# Unity assets
+/Assets/3D\ Shark\ pack/
