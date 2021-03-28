@@ -57,7 +57,6 @@ public class SchoolMoving : MonoBehaviour
 		for (int i = 0; i < numberOfFish; i++)
 		{
 			fishScript[i].Velocity = nextVelocity[i];
-
 		}
 	}
 
@@ -160,14 +159,14 @@ public class SchoolMoving : MonoBehaviour
 	{
 		for (int i = 0; i < numberOfFish; i++)
 		{
-			float magnitude = nextVelocity[i].magnitude;
-			if (magnitude < minimumVelocity)
+			float mag = nextVelocity[i].magnitude;
+			if (0 < mag && mag < minimumVelocity)
 			{
-				nextVelocity[i] *= minimumVelocity / magnitude;
+				nextVelocity[i] *= minimumVelocity / mag;
 			}
-			else if (magnitude > maximumVelocity)
+			else if (mag > maximumVelocity)
 			{
-				nextVelocity[i] *= maximumVelocity / magnitude;
+				nextVelocity[i] *= maximumVelocity / mag;
 			}
 		}
 	}
