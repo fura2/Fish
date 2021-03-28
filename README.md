@@ -2,8 +2,6 @@
 
 School of fish simulator made with Unity
 
-## Screenshot
-
 ![](./screenshot.png)
 
 ## Demo

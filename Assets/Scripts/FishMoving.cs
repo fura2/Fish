@@ -11,14 +11,14 @@ public class FishMoving : MonoBehaviour
 
 	void Start()
 	{
-		Velocity = Vector3.forward;
+		Velocity = transform.forward;
 		tankSize = tankObject.GetComponent<TankUtility>().Size;
 	}
 
 	void LateUpdate()
 	{
 		transform.LookAt(transform.position + Velocity);
-		transform.Translate(Vector3.forward * Velocity.magnitude * Time.deltaTime);
+		transform.Translate(Velocity * Time.deltaTime, Space.World);
 
 		// periodic boundary condition
 		if (transform.position.x > tankSize.x / 2)
