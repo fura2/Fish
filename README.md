@@ -19,6 +19,6 @@ School of fish simulator made with Unity
 
 ## How to open the Unity project
 
-Unity version: 2019.4.21f1
+Unity version: 2020.3.2f1
 
 In preparation
