@@ -6,7 +6,7 @@ School of fish simulator made with Unity
 
 ## Demo
 
-[https://fura2.github.io/Fish/](https://fura2.github.io/fish/)
+[https://fura2.github.io/fish/](https://fura2.github.io/fish/)
 
 ## Usage
 
